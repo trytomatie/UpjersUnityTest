@@ -2,6 +2,8 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class PlantingManager : MonoBehaviour
 {
@@ -25,7 +27,7 @@ public class PlantingManager : MonoBehaviour
     {
         if (plantingMode)
         {
-            hasValidPosition = GetGridPositionOnScreen();
+            hasValidPosition = SetGridPositionOnScreen();
             if (hasValidPosition)
             {
                 print(gridPosition);
@@ -65,9 +67,14 @@ public class PlantingManager : MonoBehaviour
     /// Get the grid position on the screen and checks if the position is valid.
     /// </summary>
     /// <returns>is valid position</returns>
-    private bool GetGridPositionOnScreen()
+    private bool SetGridPositionOnScreen()
     {
+        if(EventSystem.current.IsPointerOverGameObject())
+        {
+            return false;
+        }
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        
         Physics.Raycast(ray, out RaycastHit hit);
         if (hit.collider != null)
         {
@@ -75,7 +82,7 @@ public class PlantingManager : MonoBehaviour
 
             gridPosition = new Vector2Int(Mathf.RoundToInt(hitPoint.x), Mathf.RoundToInt(hitPoint.z));
             return true; // Hit detected
-        }
+        }   
         return false; // No hit detected
     }
 
