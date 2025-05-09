@@ -1,5 +1,7 @@
 using UnityEngine;
-
-public class Crop : MonoBehaviour
+namespace PlantingGame
 {
+    public class Crop : MonoBehaviour
+    {
+    }
 }
