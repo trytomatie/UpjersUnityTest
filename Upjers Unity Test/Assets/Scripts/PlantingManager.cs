@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace PlantingGame
         private Camera _mainCamera;
         private Vector2Int _indicatorGridPosition = new Vector2Int(int.MaxValue, int.MaxValue);
         private Vector2Int _selectedGridPosition = new Vector2Int(int.MaxValue, int.MaxValue);
+        private Dictionary<Vector2Int,Crop> _crops = new Dictionary<Vector2Int,Crop>();
+        private int _selectedCropPrefabIndex = 0;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -100,6 +103,29 @@ namespace PlantingGame
                 selectedCellIndictaor.SetActive(false);
             }
             return false;
+        }
+
+        public void PlaceOnSelectedCell()
+        {
+            // Check if the selected cell is valid
+            if (_selectedGridPosition.x == int.MaxValue
+                || _selectedGridPosition.y == int.MaxValue
+                || _crops.ContainsKey(_selectedGridPosition))
+            {
+                return;
+            }
+            GameObject go = Instantiate(cropPrefabs[_selectedCropPrefabIndex], new Vector3(_selectedGridPosition.x, 0.01f, _selectedGridPosition.y), Quaternion.identity);
+            Crop crop = go.GetComponent<Crop>();
+            _crops.Add(_selectedGridPosition, crop);
+        }
+
+        public void RemoveCrop(Vector2Int gridPosition)
+        {
+            if (_crops.ContainsKey(gridPosition))
+            {
+                Destroy(_crops[gridPosition].gameObject);
+                _crops.Remove(gridPosition);
+            }
         }
 
         /// <summary>
