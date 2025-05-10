@@ -13,16 +13,19 @@ namespace PlantingGame
         public GameObject grid;
         public GameObject placementIndicator;
         public GameObject selectedCellIndictaor;
+        public UnityEvent<bool> onPlantingModeToggled;
         private bool _plantingMode = false;
         private Camera _mainCamera;
         private Vector2Int _indicatorGridPosition = new Vector2Int(int.MaxValue, int.MaxValue);
         private Vector2Int _selectedGridPosition = new Vector2Int(int.MaxValue, int.MaxValue);
         private Dictionary<Vector2Int,Crop> _crops = new Dictionary<Vector2Int,Crop>();
         private int _selectedCropPrefabIndex = 0;
+        private GameManager _gameManager;
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
+            _gameManager = FindFirstObjectByType<GameManager>();
             TogglePlantingMode(false);
             _mainCamera = Camera.main;
             GameManager.inputActions.Game.PlantCrop.performed += ctx => SelectGridCell();
@@ -70,6 +73,7 @@ namespace PlantingGame
         public void TogglePlantingMode(bool value)
         {
             _plantingMode = value;
+            onPlantingModeToggled.Invoke(value);
             if (value)
             {
                 grid.SetActive(true);
@@ -80,7 +84,6 @@ namespace PlantingGame
             {
                 grid.SetActive(false);
                 GameManager.inputActions.Game.PlantCrop.Disable();
-
             }
         }
 
@@ -93,18 +96,18 @@ namespace PlantingGame
             bool hasValidPosition = GetGridPositionOnScreen(out _selectedGridPosition);
             if (hasValidPosition)
             {
-                selectedCellIndictaor.SetActive(true);
-                selectedCellIndictaor.transform.position = new Vector3(_selectedGridPosition.x, 0.05f, _selectedGridPosition.y);
+                PlaceOnSelectedCell();
                 return true;
             }
             else
             {
-                _selectedGridPosition = new Vector2Int(int.MaxValue, int.MaxValue);
-                selectedCellIndictaor.SetActive(false);
+                return false;
             }
-            return false;
         }
 
+        /// <summary>
+        /// Places the selected crop prefab on the selected cell.
+        /// </summary>
         public void PlaceOnSelectedCell()
         {
             // Check if the selected cell is valid
@@ -119,11 +122,28 @@ namespace PlantingGame
             _crops.Add(_selectedGridPosition, crop);
         }
 
+        /// <summary>
+        /// Sets the selected crop prefab index.
+        /// </summary>
+        /// <param name="index"></param>
+        public void SetSelectedCropPrefabIndex(int index)
+        {
+            if (index < 0 || index >= cropPrefabs.Length)
+            {
+                Debug.LogError("Invalid crop prefab index.");
+                return;
+            }
+            _selectedCropPrefabIndex = index;
+        }
+
+        /// <summary>
+        /// Remove Crop from crop dictionary
+        /// </summary>
+        /// <param name="gridPosition"></param>
         public void RemoveCrop(Vector2Int gridPosition)
         {
             if (_crops.ContainsKey(gridPosition))
             {
-                Destroy(_crops[gridPosition].gameObject);
                 _crops.Remove(gridPosition);
             }
         }
@@ -135,7 +155,7 @@ namespace PlantingGame
         private bool GetGridPositionOnScreen(out Vector2Int gridPosition)
         {
             gridPosition = new Vector2Int(int.MaxValue, int.MaxValue);
-            if (EventSystem.current.IsPointerOverGameObject())
+            if (_gameManager.isOverUIElement)
             {
                 return false;
             }
@@ -158,6 +178,7 @@ namespace PlantingGame
         {
             grid.SetActive(value);
         }
+
 
         private void OnValidate()
         {
