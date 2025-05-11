@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Plant
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ca307cae27e28fd45a9d8d7e42cd3a3f, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: ca307cae27e28fd45a9d8d7e42cd3a3f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 68724fb43cf223842ac13f8d25c90d02, type: 2}
+  m_sharedMaterial: {fileID: 4060309320160924730, guid: 68724fb43cf223842ac13f8d25c90d02, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

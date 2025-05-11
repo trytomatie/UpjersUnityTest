@@ -11,7 +11,7 @@ namespace PlantingGame
         private Animator _animator;
         private NavMeshAgent _agent;
         private WorkerJobManager _workerJobManager;
-        private float workingTime = 8.5f;
+        private float workingTime = 5.5f;
         private bool _isWorking = false;
         private Vector3 _smoothedDeltaPosition;
         public WorkerJob _currentJob;
