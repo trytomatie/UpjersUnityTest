@@ -110,15 +110,18 @@ namespace PlantingGame
         /// </summary>
         public void PlaceOnSelectedCell()
         {
+            Crop selectedPrefabCrop = cropPrefabs[_selectedCropPrefabIndex].GetComponent<Crop>();
             // Check if the selected cell is valid
             if (_selectedGridPosition.x == int.MaxValue
                 || _selectedGridPosition.y == int.MaxValue
-                || _crops.ContainsKey(_selectedGridPosition))
+                || _crops.ContainsKey(_selectedGridPosition)
+                || _gameManager.Money < selectedPrefabCrop.cost)
             {
                 return;
             }
             GameObject go = Instantiate(cropPrefabs[_selectedCropPrefabIndex], new Vector3(_selectedGridPosition.x, 0.01f, _selectedGridPosition.y), Quaternion.identity);
             Crop crop = go.GetComponent<Crop>();
+            _gameManager.Money -= (int)crop.cost;
             _crops.Add(_selectedGridPosition, crop);
         }
 

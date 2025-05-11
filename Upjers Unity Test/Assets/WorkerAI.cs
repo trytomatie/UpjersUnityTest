@@ -33,6 +33,8 @@ namespace PlantingGame
             _agent.nextPosition = rootPosition;
         }
 
+        
+
         private void Update()
         {
             if (_currentJob != null && _agent.remainingDistance <= _agent.stoppingDistance && !_isWorking)
@@ -45,11 +47,15 @@ namespace PlantingGame
             Animation();
         }
 
+        /// <summary>
+        /// Finishes the work, Invoked after the working time is over.
+        /// </summary>
         private void FinishWork()
         {
             _currentJob.crop.AdvanceGrowthCycle();
             _currentJob = null;
             _isWorking = false;
+            transform.position = new Vector3(transform.position.x, 0, transform.position.z); // Set Y position to 0 because of rootmotion drift
         }
         /// <summary>
         /// Assigns job to worker

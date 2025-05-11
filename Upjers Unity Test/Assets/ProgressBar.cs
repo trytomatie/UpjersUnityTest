@@ -56,6 +56,9 @@ namespace PlantingGame
         {
             progressBarParent.SetActive(true);
             workerAlertParent.SetActive(false);
+            fillBar.fillAmount = 0;
+            increaseBar.fillAmount = 0;
+            progressText.text = "0%";
         }
 
         IEnumerator UpdateProgressBarCoroutine(float targetProgress)

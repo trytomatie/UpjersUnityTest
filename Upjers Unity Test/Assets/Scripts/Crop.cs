@@ -6,18 +6,21 @@ namespace PlantingGame
     public class Crop : MonoBehaviour
     {
         public float growthTime = 15f;
-        public float cost = 10f;
+        public int cost = 10;
         public float sellPriceMultiplier = 1.5f;
         public bool canGrow = true;
         public GrowthStage currentGrowthStage = GrowthStage.New;
         public GameObject progressBarPrefab;
         public UnityEvent onGrowthCycleUpdate;
+        public GameObject[] cropPrefabs;
+
         private bool _waitingForWorker = false;
         private float _advancmentCompletionTime;
         private PlantingManager _plantingManager;
         private ProgressBar _progressBar;
         private WorkerJobManager _workerJobManager;
-        public GameObject[] cropPrefabs;
+        private GameManager _gameManager;
+
 
 
         private void Start()
@@ -26,6 +29,7 @@ namespace PlantingGame
             Canvas canvas = FindFirstObjectByType<Canvas>();
             _plantingManager = FindFirstObjectByType<PlantingManager>();
             _workerJobManager = FindFirstObjectByType<WorkerJobManager>();
+            _gameManager = FindFirstObjectByType<GameManager>();
             if(_plantingManager == null)
             {
                 Debug.LogError("PlantingManager not found in the scene.");
@@ -98,6 +102,7 @@ namespace PlantingGame
                             _waitingForWorker = true;
                             _progressBar.ShowWorkerAlert("Harvest!",Color.yellow);
                             _workerJobManager.AddJob(WorkerJobType.Harvesting, this);
+                            AdvanceGrowthCycle();
                         }
                         break;
                     case GrowthStage.Harvestable:
@@ -105,7 +110,7 @@ namespace PlantingGame
                         break;
                 }
                 onGrowthCycleUpdate.Invoke(); // other events could be added here that may affect the growth cycle.
-                yield return new WaitForSeconds(1f); // Check every second
+                yield return new WaitForSeconds(1f);
             }
         }
 
@@ -127,6 +132,13 @@ namespace PlantingGame
                 currentGrowthStage = GrowthStage.Harvestable;
                 _waitingForWorker = true;
                 SetCropModel(currentGrowthStage);
+            }
+            else if(currentGrowthStage == GrowthStage.Harvestable)
+            {
+                _plantingManager.RemoveCrop(new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
+                _gameManager.Money += Mathf.RoundToInt(cost * sellPriceMultiplier);
+                Destroy(_progressBar.gameObject);
+                Destroy(gameObject);
             }
         }
 
