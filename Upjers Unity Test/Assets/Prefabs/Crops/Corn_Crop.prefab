@@ -46,6 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3c3ea3d8f938184f9298e0e0139bac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  growthTime: 15
+  cost: 10
+  sellPriceMultiplier: 1.5
+  currentGrowthStage: 0
+  progressBarPrefab: {fileID: 8774430799316230016, guid: 4ab1ba5da8edf0a4d8ce61a6c4a11141, type: 3}
+  onGrowthCycleUpdate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &2651393502571955558
 PrefabInstance:
   m_ObjectHideFlags: 0
