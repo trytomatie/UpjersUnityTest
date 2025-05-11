@@ -68,7 +68,6 @@ namespace PlantingGame
                 elapsedTime += Time.deltaTime;
                 float progress = Mathf.Lerp(startProgress, targetProgress, elapsedTime / fillDuration);
                 increaseBar.fillAmount = progress;
-                print(progress);
                 yield return null;
             }
             yield return new WaitForSeconds(backFillDelay);

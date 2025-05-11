@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WorkerHarvester
+  m_Controller: {fileID: 9100000, guid: 74061b4a5b50cb84b8c4ad3903cbbd3c, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 1129056862055292554, guid: 87323e9c4a334a841bd12c70cbec79fe, type: 3}
+    m_OverrideClip: {fileID: 8101038349688005362, guid: af550313283e80541b602f294b11bcd7, type: 3}
+  - m_OriginalClip: {fileID: 2143429530187259283, guid: 87323e9c4a334a841bd12c70cbec79fe, type: 3}
+    m_OverrideClip: {fileID: -8094267110726782241, guid: af550313283e80541b602f294b11bcd7, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 40a0abbe403346e43b9a2852c056e873, type: 2}
+    m_OverrideClip: {fileID: 118751413164453997, guid: af550313283e80541b602f294b11bcd7, type: 3}

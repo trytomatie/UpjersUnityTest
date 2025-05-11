@@ -49,11 +49,15 @@ MonoBehaviour:
   growthTime: 15
   cost: 10
   sellPriceMultiplier: 1.5
+  canGrow: 1
   currentGrowthStage: 0
   progressBarPrefab: {fileID: 8774430799316230016, guid: 4ab1ba5da8edf0a4d8ce61a6c4a11141, type: 3}
   onGrowthCycleUpdate:
     m_PersistentCalls:
       m_Calls: []
+  cropPrefabs:
+  - {fileID: 2885344487441807415}
+  - {fileID: 4629105549302130037}
 --- !u!1001 &2651393502571955558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -128,6 +132,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 7913bac3f1552f145ad4347579fb97f4, type: 3}
   m_PrefabInstance: {fileID: 2651393502571955558}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2885344487441807415 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7913bac3f1552f145ad4347579fb97f4, type: 3}
+  m_PrefabInstance: {fileID: 2651393502571955558}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5547461851135891492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -197,6 +206,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b6d6903348791541a18ac5756bcabb5, type: 3}
+--- !u!1 &4629105549302130037 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 3b6d6903348791541a18ac5756bcabb5, type: 3}
+  m_PrefabInstance: {fileID: 5547461851135891492}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5437588936711028687 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3b6d6903348791541a18ac5756bcabb5, type: 3}

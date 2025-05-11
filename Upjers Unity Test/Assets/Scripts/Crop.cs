@@ -16,6 +16,8 @@ namespace PlantingGame
         private float _advancmentCompletionTime;
         private PlantingManager _plantingManager;
         private ProgressBar _progressBar;
+        private WorkerJobManager _workerJobManager;
+        public GameObject[] cropPrefabs;
 
 
         private void Start()
@@ -23,6 +25,7 @@ namespace PlantingGame
             CropSetup();
             Canvas canvas = FindFirstObjectByType<Canvas>();
             _plantingManager = FindFirstObjectByType<PlantingManager>();
+            _workerJobManager = FindFirstObjectByType<WorkerJobManager>();
             if(_plantingManager == null)
             {
                 Debug.LogError("PlantingManager not found in the scene.");
@@ -31,8 +34,33 @@ namespace PlantingGame
             _progressBar = Instantiate(progressBarPrefab, canvas.transform).GetComponent<ProgressBar>();
             _progressBar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 1.5f, 0));
             onGrowthCycleUpdate.AddListener(UpdateProgressBar);
-
+            SetCropModel(currentGrowthStage);
         }
+
+        public void SetCropModel(GrowthStage growthStage)
+        {
+            if (cropPrefabs.Length == 0)
+            {
+                Debug.LogError("No crop prefabs assigned.");
+                return;
+            }
+            for (int i = 0; i < cropPrefabs.Length; i++)
+            {
+                cropPrefabs[i].SetActive(false);
+            }
+            switch (growthStage)
+            {
+                case GrowthStage.New:
+                    cropPrefabs[0].SetActive(true);
+                    break;
+                case GrowthStage.Maturing:
+                    cropPrefabs[1].SetActive(true);
+                    break;
+                case GrowthStage.Harvestable:
+                    cropPrefabs[1].SetActive(true);
+                    break;
+            }
+        }   
 
         public void UpdateProgressBar()
         {
@@ -59,17 +87,17 @@ namespace PlantingGame
                     case GrowthStage.New:
                         if (CheckGrowthAdvancement())
                         {
-                            // TODO: Call worker here
                             _waitingForWorker = true;
                             _progressBar.ShowWorkerAlert("Water!",new Color32(154,255,255,255));
+                            _workerJobManager.AddJob(WorkerJobType.Gardening, this);
                         }
                         break;
                     case GrowthStage.Maturing:
                         if (CheckGrowthAdvancement())
                         {
-                            CheckGrowthCycle();
-                            // TODO: Call worker here
+                            _waitingForWorker = true;
                             _progressBar.ShowWorkerAlert("Harvest!",Color.yellow);
+                            _workerJobManager.AddJob(WorkerJobType.Harvesting, this);
                         }
                         break;
                     case GrowthStage.Harvestable:
@@ -81,6 +109,9 @@ namespace PlantingGame
             }
         }
 
+        /// <summary>
+        /// Advances the growth cycle
+        /// </summary>
         public void AdvanceGrowthCycle()
         {
             if (currentGrowthStage == GrowthStage.New)
@@ -89,11 +120,13 @@ namespace PlantingGame
                 _progressBar.HideWorkerAlert();
                 currentGrowthStage = GrowthStage.Maturing;
                 _advancmentCompletionTime = Time.time + growthTime;
+                SetCropModel(currentGrowthStage);
             }
             else if (currentGrowthStage == GrowthStage.Maturing)
             {
                 currentGrowthStage = GrowthStage.Harvestable;
                 _waitingForWorker = true;
+                SetCropModel(currentGrowthStage);
             }
         }
 
