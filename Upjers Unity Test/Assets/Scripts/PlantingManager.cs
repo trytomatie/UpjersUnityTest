@@ -29,6 +29,11 @@ namespace PlantingGame
             TogglePlantingMode(false);
             _mainCamera = Camera.main;
             GameManager.inputActions.Game.PlantCrop.performed += ctx => SelectGridCell();
+            List<CropsToggleSetup> cropToggles = new List<CropsToggleSetup>(FindObjectsOfType<CropsToggleSetup>(true));
+            for (int i = 0; i < cropToggles.Count; i++)
+            {
+                cropToggles[i].SetUpCrop(i, cropData[i]);
+            }
 
         }
 
@@ -110,18 +115,17 @@ namespace PlantingGame
         /// </summary>
         public void PlaceOnSelectedCell()
         {
-            Crop selectedPrefabCrop = cropData[_selectedCropPrefabIndex].GetComponent<Crop>();
             // Check if the selected cell is valid
             if (_selectedGridPosition.x == int.MaxValue
                 || _selectedGridPosition.y == int.MaxValue
                 || _crops.ContainsKey(_selectedGridPosition)
-                || _gameManager.Money < selectedPrefabCrop.cost)
+                || _gameManager.Money < cropData[_selectedCropPrefabIndex].cost)
             {
                 return;
             }
             GameObject go = Instantiate(cropData[_selectedCropPrefabIndex].cropPrefab, new Vector3(_selectedGridPosition.x, 0.01f, _selectedGridPosition.y), Quaternion.identity);
             Crop crop = go.GetComponent<Crop>();
-            _gameManager.Money -= (int)crop.cost;
+            _gameManager.Money -= (int)crop.cropData.cost;
             _crops.Add(_selectedGridPosition, crop);
         }
 
