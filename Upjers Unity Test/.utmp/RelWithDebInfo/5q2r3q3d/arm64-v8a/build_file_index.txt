@@ -1,0 +1,2 @@
+C:\Github\UpjersUnityTest\Upjers Unity Test\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Github\UpjersUnityTest\Upjers Unity Test\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

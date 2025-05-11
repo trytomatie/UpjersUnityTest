@@ -1,7 +1,9 @@
 ﻿
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace PlantingGame
 {
@@ -29,14 +31,13 @@ namespace PlantingGame
         /// </summary>
         private void PointerOverUiElementCheck()
         {
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            List<RaycastResult> result = new List<RaycastResult>();
+            PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
             {
-                isOverUIElement = true;
-            }
-            else
-            {
-                isOverUIElement = false;
-            }
+                position = GameManager.inputActions.Game.PointerPosition.ReadValue<Vector2>()
+            };
+            EventSystem.current.RaycastAll(pointerEventData, result);
+            isOverUIElement = result.Count > 0;
         }
 
         public int Money { 

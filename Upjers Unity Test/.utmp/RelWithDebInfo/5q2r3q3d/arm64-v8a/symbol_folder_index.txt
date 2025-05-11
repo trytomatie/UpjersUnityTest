@@ -1,0 +1,1 @@
+C:\Github\UpjersUnityTest\Upjers Unity Test\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\5q2r3q3d\obj\arm64-v8a

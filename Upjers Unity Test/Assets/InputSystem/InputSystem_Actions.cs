@@ -35,6 +35,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""6a3ef4ad-6f85-42ba-84ad-229776e0ac11"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -51,12 +60,34 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""139f22cb-32da-48d7-a52c-a303a67c55e2"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""id"": ""8a5617f0-54f4-4c4d-abd2-95970fed9ed8"",
+                    ""path"": ""<Touchscreen>/Press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PlantCrop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""321c376c-076e-4901-b503-def18b26c0ba"",
+                    ""path"": ""<Touchscreen>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a177bcaa-a109-4b04-b974-afa106c95628"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -129,6 +160,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Game
         m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
         m_Game_PlantCrop = m_Game.FindAction("PlantCrop", throwIfNotFound: true);
+        m_Game_PointerPosition = m_Game.FindAction("PointerPosition", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -196,11 +228,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Game;
     private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
     private readonly InputAction m_Game_PlantCrop;
+    private readonly InputAction m_Game_PointerPosition;
     public struct GameActions
     {
         private @InputSystem_Actions m_Wrapper;
         public GameActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
         public InputAction @PlantCrop => m_Wrapper.m_Game_PlantCrop;
+        public InputAction @PointerPosition => m_Wrapper.m_Game_PointerPosition;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -213,6 +247,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @PlantCrop.started += instance.OnPlantCrop;
             @PlantCrop.performed += instance.OnPlantCrop;
             @PlantCrop.canceled += instance.OnPlantCrop;
+            @PointerPosition.started += instance.OnPointerPosition;
+            @PointerPosition.performed += instance.OnPointerPosition;
+            @PointerPosition.canceled += instance.OnPointerPosition;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -220,6 +257,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @PlantCrop.started -= instance.OnPlantCrop;
             @PlantCrop.performed -= instance.OnPlantCrop;
             @PlantCrop.canceled -= instance.OnPlantCrop;
+            @PointerPosition.started -= instance.OnPointerPosition;
+            @PointerPosition.performed -= instance.OnPointerPosition;
+            @PointerPosition.canceled -= instance.OnPointerPosition;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -285,5 +325,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     public interface IGameActions
     {
         void OnPlantCrop(InputAction.CallbackContext context);
+        void OnPointerPosition(InputAction.CallbackContext context);
     }
 }

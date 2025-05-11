@@ -46,7 +46,6 @@ namespace PlantingGame
         /// </summary>
         private void PlaceIndictatorForPC()
         {
-#if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_STANDALONE_LINUX
             if (_plantingMode)
             {
                 bool hasValidPosition = GetGridPositionOnScreen(out _indicatorGridPosition);
@@ -60,7 +59,6 @@ namespace PlantingGame
                     placementIndicator.SetActive(false);
                 }
             }
-#endif
         }
 
         /// <summary>
@@ -166,7 +164,8 @@ namespace PlantingGame
             {
                 return false;
             }
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+            Ray ray = _mainCamera.ScreenPointToRay(GameManager.inputActions.Game.PointerPosition.ReadValue<Vector2>());
+
             Physics.Raycast(ray, out RaycastHit hit);
             if (hit.collider != null)
             {
