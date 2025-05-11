@@ -9,7 +9,7 @@ namespace PlantingGame
 {
     public class PlantingManager : MonoBehaviour
     {
-        public GameObject[] cropPrefabs;
+        public CropData[] cropData;
         public GameObject grid;
         public GameObject placementIndicator;
         public GameObject selectedCellIndictaor;
@@ -110,7 +110,7 @@ namespace PlantingGame
         /// </summary>
         public void PlaceOnSelectedCell()
         {
-            Crop selectedPrefabCrop = cropPrefabs[_selectedCropPrefabIndex].GetComponent<Crop>();
+            Crop selectedPrefabCrop = cropData[_selectedCropPrefabIndex].GetComponent<Crop>();
             // Check if the selected cell is valid
             if (_selectedGridPosition.x == int.MaxValue
                 || _selectedGridPosition.y == int.MaxValue
@@ -119,7 +119,7 @@ namespace PlantingGame
             {
                 return;
             }
-            GameObject go = Instantiate(cropPrefabs[_selectedCropPrefabIndex], new Vector3(_selectedGridPosition.x, 0.01f, _selectedGridPosition.y), Quaternion.identity);
+            GameObject go = Instantiate(cropData[_selectedCropPrefabIndex].cropPrefab, new Vector3(_selectedGridPosition.x, 0.01f, _selectedGridPosition.y), Quaternion.identity);
             Crop crop = go.GetComponent<Crop>();
             _gameManager.Money -= (int)crop.cost;
             _crops.Add(_selectedGridPosition, crop);
@@ -131,7 +131,7 @@ namespace PlantingGame
         /// <param name="index"></param>
         public void SetSelectedCropPrefabIndex(int index)
         {
-            if (index < 0 || index >= cropPrefabs.Length)
+            if (index < 0 || index >= cropData.Length)
             {
                 Debug.LogError("Invalid crop prefab index.");
                 return;
@@ -186,11 +186,11 @@ namespace PlantingGame
         private void OnValidate()
         {
             // Check if each crop prefab has a Crop component
-            foreach (GameObject cropPrefab in cropPrefabs)
+            foreach (CropData cropData in cropData)
             {
-                if (cropPrefab.GetComponent<Crop>() == null)
+                if (cropData.cropPrefab.GetComponent<Crop>() == null)
                 {
-                    Debug.LogError($"The crop prefab ({cropPrefab.name}) must have a Crop component attached.", cropPrefab);
+                    Debug.LogError($"The crop prefab ({cropData.cropPrefab}) must have a Crop component attached.", cropData);
 
                 }
             }

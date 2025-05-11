@@ -5,9 +5,6 @@ namespace PlantingGame
 {
     public class Crop : MonoBehaviour
     {
-        public float growthTime = 15f;
-        public int cost = 10;
-        public float sellPriceMultiplier = 1.5f;
         public bool canGrow = true;
         public GrowthStage currentGrowthStage = GrowthStage.New;
         public GameObject progressBarPrefab;
@@ -20,6 +17,7 @@ namespace PlantingGame
         private ProgressBar _progressBar;
         private WorkerJobManager _workerJobManager;
         private GameManager _gameManager;
+        public CropData cropData;
 
 
 
@@ -68,7 +66,7 @@ namespace PlantingGame
 
         public void UpdateProgressBar()
         {
-            float progress = 1-(_advancmentCompletionTime - Time.time) / growthTime;
+            float progress = 1-(_advancmentCompletionTime - Time.time) / cropData.growthTime;
             _progressBar.UpdateProgressBar(progress);
             _progressBar.progressText.text = $"{(int)(progress * 100)}%";
         }
@@ -77,7 +75,7 @@ namespace PlantingGame
         /// </summary>
         private void CropSetup()
         {
-            _advancmentCompletionTime = Time.time + growthTime;
+            _advancmentCompletionTime = Time.time + cropData.growthTime;
             currentGrowthStage = GrowthStage.New;
             StartCoroutine(CheckGrowthCycle());
         }
@@ -124,7 +122,7 @@ namespace PlantingGame
                 _waitingForWorker = false;
                 _progressBar.HideWorkerAlert();
                 currentGrowthStage = GrowthStage.Maturing;
-                _advancmentCompletionTime = Time.time + growthTime;
+                _advancmentCompletionTime = Time.time + cropData.growthTime;
                 SetCropModel(currentGrowthStage);
             }
             else if (currentGrowthStage == GrowthStage.Maturing)
@@ -136,7 +134,7 @@ namespace PlantingGame
             else if(currentGrowthStage == GrowthStage.Harvestable)
             {
                 _plantingManager.RemoveCrop(new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.z)));
-                _gameManager.Money += Mathf.RoundToInt(cost * sellPriceMultiplier);
+                _gameManager.Money += Mathf.RoundToInt(cropData.cost * cropData.sellPriceMultiplier);
                 Destroy(_progressBar.gameObject);
                 Destroy(gameObject);
             }
