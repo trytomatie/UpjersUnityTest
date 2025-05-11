@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7916489625472940376
 Transform:
   m_ObjectHideFlags: 0
@@ -29,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.01, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3334806844152545417}
@@ -127,7 +127,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7949105315543291994
 Transform:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3238526826524369443
 Transform:
   m_ObjectHideFlags: 0
@@ -374,9 +374,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38dc8cfeb63ace243a15cc3451707f81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cropPrefabs:
-  - {fileID: 7707907039143117397, guid: d454f32b9cd1eda488e12ce2c77f43c6, type: 3}
-  - {fileID: 5490665248402476585, guid: 982c146bc49d4034ca3dec0272406d9d, type: 3}
+  cropData:
+  - {fileID: 11400000, guid: cae194d6c7845aa4fa7d5000943669c6, type: 2}
+  - {fileID: 11400000, guid: f8d95d2380e43c24d88746c7199e62ac, type: 2}
   grid: {fileID: 800157309444828172}
   placementIndicator: {fileID: 3435811419845520508}
   selectedCellIndictaor: {fileID: 2855916810933942800}
+  onPlantingModeToggled:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
