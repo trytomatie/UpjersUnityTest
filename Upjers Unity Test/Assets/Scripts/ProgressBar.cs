@@ -54,6 +54,7 @@ namespace PlantingGame
 
         public void HideWorkerAlert()
         {
+            StopAllCoroutines();
             progressBarParent.SetActive(true);
             workerAlertParent.SetActive(false);
             fillBar.fillAmount = 0;
