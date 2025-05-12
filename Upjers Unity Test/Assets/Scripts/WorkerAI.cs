@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,6 +16,11 @@ namespace PlantingGame
         private bool _isWorking = false;
         private Vector3 _smoothedDeltaPosition;
         public WorkerJob _currentJob;
+
+        // Animator Hashes
+        private int _workAnimatorHash = Animator.StringToHash("Work");
+        private int _locomotionAnimatorHash = Animator.StringToHash("Locomotion");
+
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
@@ -32,17 +38,17 @@ namespace PlantingGame
             transform.position = rootPosition;
             _agent.nextPosition = rootPosition;
         }
-
         
 
         private void Update()
         {
             if (_currentJob != null && _agent.remainingDistance <= _agent.stoppingDistance && !_isWorking)
             {
-
-                _animator.SetTrigger("Work");
+                StopCoroutine(TurnToTargetDestination());
+                StartCoroutine(TurnToTargetDestination());
+                _animator.SetTrigger(_workAnimatorHash);
                 _isWorking = true;
-                Invoke("FinishWork", workingTime);
+                Invoke("FinishWork", WorkingTime);
             }
             Animation();
         }
@@ -76,7 +82,9 @@ namespace PlantingGame
             }
 
         }
-
+        /// <summary>
+        /// Animation Logic for workerAi.
+        /// </summary>
         private void Animation()
         {
             Vector3 worldDeltaPosition = _agent.nextPosition - _agent.transform.position;
@@ -90,9 +98,25 @@ namespace PlantingGame
 
             Vector3 velocity = _smoothedDeltaPosition / Time.deltaTime;
 
-            _animator.SetFloat("Locomotion", velocity.magnitude, 0.1f, Time.deltaTime);
-            _animator.SetFloat("Dx", dx);
-            _animator.SetFloat("Dz", dz);
+            _animator.SetFloat(_locomotionAnimatorHash, velocity.magnitude, 0.1f, Time.deltaTime);
+            //_animator.SetFloat("Dx", dx);
+            //_animator.SetFloat("Dz", dz);
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator TurnToTargetDestination()
+        {
+            Vector3 targetPosition = _agent.destination;
+            Vector3 direction = targetPosition - transform.position;
+            direction.y = 0;
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 90);
+                yield return null;
+            }
         }
 
         private void OnDestroy()
@@ -100,6 +124,8 @@ namespace PlantingGame
             _workerJobManager.RemoveWorker(this);
             
         }
+
+        public float WorkingTime { get => workingTime; set => workingTime = value; }
     }
 }
 

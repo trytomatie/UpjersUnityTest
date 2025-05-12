@@ -26,6 +26,10 @@ namespace PlantingGame
             _jobs.Add(job);
         }
 
+        /// <summary>
+        /// Adds Worker to the list of workers.
+        /// </summary>
+        /// <param name="worker"></param>
         public void AddWorker(WorkerAI worker)
         {
             if (!_workers.Contains(worker))
@@ -80,11 +84,13 @@ namespace PlantingGame
 
                     _jobs.RemoveAll(j => assignedJobs.Contains(j));
                 }
-                print("Working");
                 yield return new WaitForSeconds(0.5f);
             }
         }
-
+        /// <summary>
+        /// Removes Worker from WorkerList
+        /// </summary>
+        /// <param name="worker"></param>
         public void RemoveWorker(WorkerAI worker)
         {
             if (_workers.Contains(worker))
