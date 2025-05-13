@@ -38,7 +38,10 @@ namespace PlantingGame
             onGrowthCycleUpdate.AddListener(UpdateProgressBar);
             SetCropModel(currentGrowthStage);
         }
-
+        /// <summary>
+        /// Sets the crop model based on the growth stage.
+        /// </summary>
+        /// <param name="growthStage"></param>
         public void SetCropModel(GrowthStage growthStage)
         {
             if (cropPrefabs.Length == 0)
@@ -63,7 +66,9 @@ namespace PlantingGame
                     break;
             }
         }   
-
+        /// <summary>
+        /// Updates the Progress Bar
+        /// </summary>
         public void UpdateProgressBar()
         {
             float progress = 1-(_advancmentCompletionTime - Time.time) / cropData.growthTime;
